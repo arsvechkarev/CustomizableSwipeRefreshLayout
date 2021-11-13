@@ -43,25 +43,28 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * The MySwipeRefreshLayout should be used whenever the user can refresh the
- * contents of a view via a vertical swipe gesture. The activity that
- * instantiates this view should add an OnRefreshListener to be notified
- * whenever the swipe to refresh gesture is completed. The MySwipeRefreshLayout
- * will notify the listener each and every time the gesture is completed again;
- * the listener is responsible for correctly determining when to actually
- * initiate a refresh of its content. If the listener determines there should
- * not be a refresh, it must call setRefreshing(false) to cancel any visual
- * indication of a refresh. If an activity wishes to show just the progress
- * animation, it should call setRefreshing(true). To disable the gesture and
- * progress animation, call setEnabled(false) on the view.
- * <p>
- * This layout should be made the parent of the view that will be refreshed as a
- * result of the gesture and can only support one direct child. This view will
- * also be made the target of the gesture and will be forced to match both the
- * width and the height supplied in this layout. The MySwipeRefreshLayout does not
- * provide accessibility events; instead, a menu item must be provided to allow
- * refresh of the content wherever this gesture is used.
- * </p>
+ * CustomizableSwipeRefreshLayout works almost exactly like normal SwipeRefreshLayout, except it
+ * makes way more flexible. Instead of using default circle with arrow for progress view, it
+ * accepts any custom view of your choice, so that you can implement all animations and drawings
+ * by yourself. See {@link BaseProgressView} for more information. Usage example:
+ *
+ <pre>
+ * &lt;com.arsvechkarev.swipetorefresh.CustomizableSwipeRefreshLayout
+ *         xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+ *         xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+ *         android:layout_width=&quot;match_parent&quot;
+ *         android:layout_height=&quot;match_parent&quot;
+ *         // You should supply CustomizableSwipeRefreshLayout with your own progress view
+ *         // implementation. In this example, we have a class **MyProgressView** located in
+ *         // package **com.example.test**. **MyProgressView** should extend **BaseProgressView**
+ *         // and it should have a constructor that accepts **android.content.Context**
+ *         // See {@link BaseProgressView} for more information
+ *         app:progressViewClass=&quot;com.example.test.MyProgressView"&quot;&gt;
+ *
+ * &lt;/com.arsvechkarev.swipetorefresh.CustomizableSwipeRefreshLayout&gt;
+ * </pre>
+ *
+ * @see BaseProgressView
  */
 public class CustomizableSwipeRefreshLayout extends ViewGroup implements NestedScrollingParent3,
         NestedScrollingParent2, NestedScrollingChild3, NestedScrollingChild2, NestedScrollingParent,
@@ -483,7 +486,7 @@ public class CustomizableSwipeRefreshLayout extends ViewGroup implements NestedS
         };
         mScaleAnimation.setDuration(mMediumAnimationDuration);
         if (listener != null) {
-               mProgressView.setAnimationListener(listener);
+            mProgressView.setAnimationListener(listener);
         }
         mProgressView.clearAnimation();
         mProgressView.startAnimation(mScaleAnimation);
@@ -1263,7 +1266,7 @@ public class CustomizableSwipeRefreshLayout extends ViewGroup implements NestedS
             mAnimateToStartPosition.setDuration(ANIMATE_TO_START_DURATION);
             mAnimateToStartPosition.setInterpolator(mDecelerateInterpolator);
             if (listener != null) {
-                 mProgressView.setAnimationListener(listener);
+                mProgressView.setAnimationListener(listener);
             }
             mProgressView.clearAnimation();
             mProgressView.startAnimation(mAnimateToStartPosition);
